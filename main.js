@@ -1,5 +1,5 @@
-﻿/**
- * BharatEye Investigation - Tactical Private Intelligence Engine
+/**
+ * BharatIntel - Tactical Private Intelligence Engine
  * Client Portal & UI Interaction Logic
  */
 
@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
   if (splashScreen) {
     const statuses = [
-      "INITIALIZING SECURE BHARATEYE NETWORK...",
+      "INITIALIZING SECURE BHARATINTEL NETWORK...",
       "SYNCING PAN-INDIA OPERATIONAL COMMAND...",
       "AUTHENTICATING BENGALURU HQ & REGIONAL NODES...",
       "SECURITY PROTOCOLS VERIFIED. CLEARANCE GRANTED."
@@ -426,46 +426,114 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 8. Secure Intake Form Handler with Cryptographic Code & WhatsApp/Email Dispatch
+  // 8. Secure Intake Form Handler with AJAX Web3Forms Dispatch & WhatsApp Integration
   const intakeForm = document.getElementById('secure-intake-form');
   const intakeConfirmationModal = document.getElementById('intake-confirmation-modal');
   const intakeConfClose = document.getElementById('intake-conf-close');
+  const intakeSubmitBtn = document.getElementById('intake-submit-btn');
+  const formStatusAlert = document.getElementById('form-status-alert');
 
   if (intakeForm) {
-    intakeForm.addEventListener('submit', (e) => {
+    intakeForm.addEventListener('submit', async (e) => {
       e.preventDefault();
 
       const trackingCode = generateCaseCode();
-      const alias = document.getElementById('intake-alias').value.trim() || 'Confidential Client';
-      const phone = document.getElementById('intake-phone').value.trim() || 'Not Disclosed (Direct Signal)';
-      const service = document.getElementById('intake-service').value;
-      const jurisdiction = document.getElementById('intake-jurisdiction').value;
-      const urgency = document.getElementById('intake-urgency').value;
-      const details = document.getElementById('intake-brief').value.trim() || 'No detailed brief submitted.';
+      const alias = (document.getElementById('intake-alias')?.value || '').trim() || 'Confidential Client';
+      const phone = (document.getElementById('intake-phone')?.value || '').trim() || 'Not Disclosed (Direct Signal)';
+      const email = (document.getElementById('intake-email')?.value || '').trim() || 'Not Provided';
+      const service = document.getElementById('intake-service')?.value || 'General Inquiry';
+      const jurisdiction = document.getElementById('intake-jurisdiction')?.value || 'Maharashtra';
+      const urgency = document.getElementById('intake-urgency')?.value || 'Standard';
+      const details = (document.getElementById('intake-brief')?.value || '').trim() || 'No detailed brief submitted.';
 
-      // Construct sanitized WhatsApp Message
+      // Button loading state
+      if (intakeSubmitBtn) {
+        intakeSubmitBtn.disabled = true;
+        intakeSubmitBtn.classList.add('opacity-75', 'cursor-not-allowed');
+        const btnText = intakeSubmitBtn.querySelector('#btn-text');
+        const btnLoader = intakeSubmitBtn.querySelector('#btn-loader');
+        if (btnText && btnLoader) {
+          btnText.classList.add('hidden');
+          btnLoader.classList.remove('hidden');
+        }
+      }
+
+      // Populate hidden fields if present
+      const hiddenCode = document.getElementById('hidden-case-code');
+      if (hiddenCode) hiddenCode.value = trackingCode;
+
+      // Construct sanitized WhatsApp Message URL
       const waText = encodeURIComponent(
-        `*NEW CASE BRIEFING - BHARATEYE INVESTIGATION*\n` +
-        `â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”\n` +
-        `ðŸ”’ *Case Code:* ${trackingCode}\n` +
-        `ðŸ‘¤ *Alias/Name:* ${alias}\n` +
-        `ðŸ“ž *Contact:* ${phone}\n` +
-        `ðŸŽ¯ *Service Required:* ${service.toUpperCase()}\n` +
-        `ðŸ“ *Jurisdiction:* ${jurisdiction}\n` +
-        `âš¡ *Urgency Level:* ${urgency}\n` +
-        `ðŸ“ *Brief Summary:* ${details}\n` +
-        `â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”\n` +
-        `*Confidentiality:* Strict NDA // Sec 65B Compliant`
+        `*NEW CASE BRIEFING - BharatIntel*\n` +
+        `================================\n` +
+        `[CASE CODE] ${trackingCode}\n` +
+        `[CLIENT]    ${alias}\n` +
+        `[CONTACT]   ${phone}\n` +
+        `[SERVICE]   ${service.toUpperCase()}\n` +
+        `[LOCATION]  ${jurisdiction}\n` +
+        `[URGENCY]   ${urgency}\n` +
+        `[BRIEF]     ${details}\n` +
+        `================================\n` +
+        `*Confidentiality:* Strict NDA // Sec 65B Court-Admissible`
       );
-
       const waUrl = `https://wa.me/919225348787?text=${waText}`;
 
-      // Update Confirmation Modal
+      // Prepare AJAX submission to Web3Forms
+      const formData = new FormData(intakeForm);
+      formData.set('case_code', trackingCode);
+      formData.set('timestamp', new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }));
+      formData.set('destination_email', 'saathidreamsfoundation@gmail.com');
+
+      const accessKey = formData.get('access_key');
+      let submissionSuccess = false;
+
+      // Only attempt remote API POST if key is provided and not the default placeholder
+      if (accessKey && accessKey !== 'YOUR_ACCESS_KEY_HERE' && accessKey.length > 10) {
+        try {
+          const response = await fetch('https://api.web3forms.com/submit', {
+            method: 'POST',
+            body: formData
+          });
+          const result = await response.json();
+          if (result.success) {
+            submissionSuccess = true;
+            if (formStatusAlert) {
+              formStatusAlert.className = 'rounded-xl p-4 text-xs font-mono bg-emerald-950/80 border border-emerald-500/50 text-emerald-300 block mb-4';
+              formStatusAlert.innerHTML = `<i class="fas fa-check-circle mr-2"></i> Case File <strong>#${trackingCode}</strong> successfully encrypted and logged under NDA secrecy. An operative has been alerted for priority assessment.`;
+            }
+          }
+        } catch (err) {
+          console.warn('[BharatIntel] Web3Forms dispatch fallback:', err);
+        }
+      }
+
+      if (!submissionSuccess && formStatusAlert) {
+        formStatusAlert.className = 'rounded-xl p-4 text-xs font-mono bg-gold-950/70 border border-gold-500/50 text-gold-300 block mb-4';
+        formStatusAlert.innerHTML = `<i class="fas fa-shield-alt mr-2"></i> Case File <strong>#${trackingCode}</strong> logged under strict NDA secrecy. Click 'Dispatch via WhatsApp' below for instant direct priority dispatch to our operations desk.`;
+      }
+
+      // Reset submit button state
+      if (intakeSubmitBtn) {
+        intakeSubmitBtn.disabled = false;
+        intakeSubmitBtn.classList.remove('opacity-75', 'cursor-not-allowed');
+        const btnText = intakeSubmitBtn.querySelector('#btn-text');
+        const btnLoader = intakeSubmitBtn.querySelector('#btn-loader');
+        if (btnText && btnLoader) {
+          btnText.classList.remove('hidden');
+          btnLoader.classList.add('hidden');
+        }
+      }
+
+      // Update and display Confirmation Modal
       if (intakeConfirmationModal) {
-        document.getElementById('conf-case-code').textContent = trackingCode;
-        document.getElementById('conf-alias').textContent = alias;
-        document.getElementById('conf-service').textContent = service;
-        document.getElementById('conf-urgency').textContent = urgency;
+        const cCode = document.getElementById('conf-case-code');
+        const cAlias = document.getElementById('conf-alias');
+        const cService = document.getElementById('conf-service');
+        const cUrgency = document.getElementById('conf-urgency');
+        if (cCode) cCode.textContent = trackingCode;
+        if (cAlias) cAlias.textContent = alias;
+        if (cService) cService.textContent = service;
+        if (cUrgency) cUrgency.textContent = urgency;
         
         const waDispatchBtn = document.getElementById('conf-wa-dispatch-btn');
         if (waDispatchBtn) {
@@ -565,4 +633,5 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
+
 

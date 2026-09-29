@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Sitemap Indexation
+Sitemap: https://thebharatintel.com/sitemap.xml

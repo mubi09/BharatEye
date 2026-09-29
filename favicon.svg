@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f5d77f"/>
+      <stop offset="50%" stop-color="#d4af37"/>
+      <stop offset="100%" stop-color="#aa820a"/>
+    </linearGradient>
+    <linearGradient id="darkBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0d1322"/>
+      <stop offset="100%" stop-color="#05070d"/>
+    </linearGradient>
+  </defs>
+  <!-- Background Shield -->
+  <path d="M32 4 L56 14 V32 C56 46 45 57 32 61 C19 57 8 46 8 32 V14 Z" fill="url(#darkBg)" stroke="url(#goldGrad)" stroke-width="2.5"/>
+  <!-- Inner Shield Accent -->
+  <path d="M32 10 L50 18 V32 C50 43 41 52 32 55 C23 52 14 43 14 32 V18 Z" fill="none" stroke="rgba(212, 175, 55, 0.3)" stroke-width="1.2"/>
+  <!-- Central Eye / Iris Intel Motif -->
+  <circle cx="32" cy="32" r="10" fill="none" stroke="url(#goldGrad)" stroke-width="2"/>
+  <circle cx="32" cy="32" r="4.5" fill="#f5d77f"/>
+  <circle cx="34" cy="30" r="1.5" fill="#ffffff"/>
+  <!-- Crosshairs / Radar -->
+  <line x1="32" y1="16" x2="32" y2="20" stroke="#10b981" stroke-width="1.8"/>
+  <line x1="32" y1="44" x2="32" y2="48" stroke="#10b981" stroke-width="1.8"/>
+  <line x1="16" y1="32" x2="20" y2="32" stroke="#10b981" stroke-width="1.8"/>
+  <line x1="44" y1="32" x2="48" y2="32" stroke="#10b981" stroke-width="1.8"/>
+</svg>

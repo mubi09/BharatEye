@@ -1,9 +1,8 @@
 /* ==========================================================================
-   BharatEye Investigation - Elite Private Intelligence Web Architecture
+   BharatIntel - Elite Private Detective & Intelligence Agency
+   Domain: thebharatintel.com | Operational Command: Maharashtra & Pan-India
    Design System: Deep Midnight Navy, 24K Rich Gold, Glassmorphism, Tactical HUD & Motion Effects
    ========================================================================== */
-
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
 :root {
   --bg-primary: #070a12;
@@ -311,6 +310,12 @@ body {
   overflow: hidden;
   position: relative;
   background: #0f172a;
+}
+
+.origin-card-img-box picture {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .origin-card-img-box img {
@@ -742,17 +747,27 @@ body {
 }
 
 /* ==========================================================================
-   MOBILE RESPONSIVENESS & TOUCH OPTIMIZATIONS
+   MOBILE RESPONSIVENESS & TOUCH OPTIMIZATIONS (ALL MOBILE SCREENS)
    ========================================================================== */
+@media (max-width: 1024px) {
+  .origin-stats-pill-bar {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+}
+
 @media (max-width: 768px) {
+  /* Prevent iOS Safari input auto-zoom distortion */
+  input[type="text"],
+  input[type="tel"],
+  input[type="email"],
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+
   .top-command-bar {
     padding-top: 6px;
     padding-bottom: 6px;
-  }
-
-  .top-bar-email {
-    font-size: 0.72rem;
-    padding: 4px 10px;
   }
 
   .top-bar-phone {
@@ -761,19 +776,15 @@ body {
   }
 
   .origin-service-card {
-    padding: 16px;
+    padding: 18px 16px;
     border-radius: 20px;
+    width: 100%;
+    max-width: 100%;
   }
 
   .origin-card-img-box {
-    height: 175px;
+    height: 180px;
     border-radius: 14px;
-  }
-
-  .origin-floating-icon {
-    width: 46px;
-    height: 46px;
-    font-size: 18px;
   }
 
   .origin-card-title {
@@ -785,10 +796,48 @@ body {
     margin-bottom: 16px;
   }
 
-  .origin-stats-pill-bar {
-    padding: 14px 12px;
+  .floating-bottom-controls {
+    bottom: 20px;
+    right: 16px;
+    left: auto;
+    display: flex;
+    flex-direction: column;
     gap: 12px;
+    z-index: 45;
+  }
+
+  .whatsapp-float-btn,
+  .call-float-btn {
+    width: 52px;
+    height: 52px;
+    font-size: 26px;
+  }
+
+  .modal-content-box {
+    padding: 24px 18px !important;
+    border-radius: 22px !important;
+    margin: 12px;
+    max-height: 88vh;
+  }
+}
+
+@media (max-width: 640px) {
+  /* Balanced 2-column stats with 5th card spanning both columns */
+  .origin-stats-pill-bar {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+    padding: 12px 10px !important;
     border-radius: 16px;
+  }
+
+  .origin-stats-pill-bar > :nth-child(5) {
+    grid-column: span 2;
+  }
+
+  .origin-stat-item {
+    padding: 10px 8px;
+    min-height: auto;
   }
 
   .origin-stat-number {
@@ -797,28 +846,53 @@ body {
 
   .origin-stat-label {
     font-size: 0.7rem;
+    line-height: 1.25;
   }
 
-  .floating-bottom-controls {
-    bottom: 16px;
-    left: 16px;
-    right: 16px;
-  }
-
-  .whatsapp-float-btn,
-  .call-float-btn {
-    width: 50px;
-    height: 50px;
-    font-size: 24px;
+  /* Full-width responsive buttons */
+  .btn-gold,
+  .btn-pill-call {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+    padding: 0.85rem 1.25rem;
   }
 }
 
 @media (max-width: 480px) {
-  .origin-stats-pill-bar {
-    grid-template-columns: repeat(2, 1fr);
+  /* Ultra-small phones: 320px - 480px (iPhone SE, Galaxy A series, etc.) */
+  body {
+    font-size: 14px;
   }
-  
+
+  .top-command-bar .max-w-7xl {
+    gap: 6px;
+  }
+
+  .origin-card-img-box {
+    height: 165px;
+  }
+
   .origin-stat-number {
-    font-size: 1.25rem;
+    font-size: 1.2rem;
+  }
+
+  .origin-stat-label {
+    font-size: 0.65rem;
+  }
+
+  /* Ensure headings fit small screens without breaking layout */
+  h1 {
+    font-size: 1.65rem !important;
+    line-height: 1.2 !important;
+  }
+
+  h2 {
+    font-size: 1.35rem !important;
+    line-height: 1.25 !important;
+  }
+
+  .modal-content-box {
+    padding: 18px 14px !important;
   }
 }
